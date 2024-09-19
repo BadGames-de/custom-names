@@ -19,10 +19,12 @@ You can access the api via the Bukkit Service Manager, but first you have to mak
 
 ```yaml
 # paper-plugin.yml
-
-CustomNames:
-    load: BEFORE
-    require: true  
+dependencies:
+  server:
+    CustomNames:
+        load: BEFORE
+        require: true
+        join-classpath: true
 ```
 
 *For more information on the `paper-plugin.yml`, check the [PaperMC Wiki](https://docs.papermc.io/paper/dev/getting-started/paper-plugins).*
