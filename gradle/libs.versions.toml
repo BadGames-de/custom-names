@@ -1,0 +1,22 @@
+[versions]
+kotlin = "2.0.20"
+shadow = "8.1.1"
+paper-api = "1.21-R0.1-SNAPSHOT"
+run-task = "2.3.0"
+paperweight = "1.7.2"
+reflection-remapper = "0.1.1"
+sonatype-central-portal-publisher = "1.2.4"
+
+[libraries]
+kotlin-jvm = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+
+paper-api = { module = "io.papermc.paper:paper-api", version.ref = "paper-api" }
+reflection-remapper = { module = "xyz.jpenilla:reflection-remapper", version.ref = "reflection-remapper" }
+
+[plugins]
+kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+shadow = { id = "com.github.johnrengelman.shadow", version.ref = "shadow" }
+run-paper = { id = "xyz.jpenilla.run-paper", version.ref = "run-task" }
+paperweight-userdev = { id = "io.papermc.paperweight.userdev", version.ref = "paperweight" }
+sonatype-central-portal-publisher = { id = "net.thebugmc.gradle.sonatype-central-portal-publisher", version.ref = "sonatype-central-portal-publisher" }
