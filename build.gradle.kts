@@ -10,7 +10,7 @@ plugins {
 
 allprojects {
     group = "space.chunks.custom-names"
-    version = "1.0.5"
+    version = "1.0.6"
 
     repositories {
         mavenCentral()
@@ -21,7 +21,7 @@ allprojects {
 
 subprojects {
     apply(plugin = "org.jetbrains.kotlin.jvm")
-    apply(plugin = "com.github.johnrengelman.shadow")
+    apply(plugin = "com.gradleup.shadow")
 
     dependencies {
         implementation(rootProject.libs.kotlin.jvm)

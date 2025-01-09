@@ -2,6 +2,7 @@ package space.chunks.customname.api
 
 import net.kyori.adventure.text.Component
 import org.bukkit.entity.Entity
+import org.bukkit.entity.Player
 import org.jetbrains.annotations.Nullable
 
 interface CustomName {
@@ -11,7 +12,14 @@ interface CustomName {
      *
      * @param name The custom name to set, or null to remove the custom name.
      */
-    fun setName(name: Component?)
+    fun setName(name: Component?) = setName { name }
+
+    /**
+     * Sets the custom name for the entity based on a viewer.
+     *
+     * @param nameCallback A callback that returns the custom name to set, or null to remove the custom name.
+     */
+    fun setName(nameCallback: (viewer: Player) -> Component?)
 
     /**
      * Sets whether the target entity is sneaking.
@@ -33,7 +41,7 @@ interface CustomName {
      * @return The current custom name, or null if not set.
      */
     @Nullable
-    fun getName(): Component?
+    fun getName(viewer: Player): Component?
 
     /**
      * Gets the ID of the nametag entity.

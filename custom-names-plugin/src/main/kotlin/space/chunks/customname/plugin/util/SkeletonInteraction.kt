@@ -13,6 +13,7 @@ import net.minecraft.world.entity.Pose
 import net.minecraft.world.phys.Vec3
 import org.bukkit.Location
 import org.bukkit.entity.Entity
+import org.bukkit.entity.Player
 import space.chunks.customname.plugin.CustomNameImpl
 import java.lang.reflect.Constructor
 import java.util.*
@@ -29,12 +30,12 @@ class SkeletonInteraction(
         return ClientboundRemoveEntitiesPacket(this.customName.getNametagId())
     }
 
-    fun syncDataPacket(): Packet<ClientGamePacketListener> {
+    fun syncDataPacket(viewer: Player): Packet<ClientGamePacketListener> {
         val data: MutableList<DataValue<*>> = ArrayList()
         data.add(
             ofData(
                 DataAccessors.DATA_CUSTOM_NAME,
-                Optional.ofNullable(PaperAdventure.asVanilla(this.customName.getName()))
+                Optional.ofNullable(PaperAdventure.asVanilla(this.customName.getName(viewer)))
             )
         )
 
@@ -75,34 +76,27 @@ class SkeletonInteraction(
         return passengerIds
     }
 
-    fun initialSpawnPacket(): Packet<*> {
+    fun initialSpawnPacket(viewer: Player): Packet<*> {
         val initialCreatePacket = ClientboundSetEntityDataPacket(
-            this.customName.getNametagId(), List.of<DataValue<*>>(
-                ofData<Float>(DataAccessors.DATA_WIDTH_ID, 0f),
+            this.customName.getNametagId(), listOf<DataValue<*>>(
+                ofData<Float>(DataAccessors.DATA_WIDTH_ID, 0.6f),
                 ofData<Float>(DataAccessors.DATA_HEIGHT_ID, this.customName.getEffectiveHeight().toFloat()),
                 ofData<Pose>(DataAccessors.DATA_POSE, Pose.CROAKING),
                 ofData<Boolean>(DataAccessors.DATA_CUSTOM_NAME_VISIBLE, true)
             )
         )
-        val syncData = syncDataPacket()
-        val afterCreateData = ClientboundSetEntityDataPacket(
-            this.customName.getNametagId(), List.of<DataValue<*>>(
-                ofData<Float>(DataAccessors.DATA_HEIGHT_ID, 511f)
-            )
-        )
+        val syncData = syncDataPacket(viewer)
 
         return ClientboundBundlePacket(
             List.of<Packet<in ClientGamePacketListener>>(
                 createPacket(),  // Create entity
                 initialCreatePacket,
                 syncData,
-                this.getRiderPacket(),
-                afterCreateData
+                this.getRiderPacket()
             )
         )
     }
 
-    // int id, UUID uuid, double x, double y, double z, float pitch, float yaw, EntityType<?> entityType, int entityData, Vec3 velocity, double headYaw
     private fun createPacket(): Packet<ClientGamePacketListener> {
         val location: Location = this.customName.getTargetEntity().getLocation()
 
@@ -117,7 +111,7 @@ class SkeletonInteraction(
             EntityType.INTERACTION,
             0,
             Vec3.ZERO,
-            0.0
+            0.0,
         )
     }
 

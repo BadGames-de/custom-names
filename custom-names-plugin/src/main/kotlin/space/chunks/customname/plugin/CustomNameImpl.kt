@@ -34,7 +34,7 @@ class CustomNameImpl(
     private var targetEntitySneaking = false
 
     @Nullable
-    private var name: Component? = null
+    private var nameCallback: ((viewer: Player) -> Component?) = { null }
     private var hidden = false
 
     private var task: BukkitTask? = null
@@ -62,8 +62,8 @@ class CustomNameImpl(
         }.runTaskTimer(plugin, 20, 20)
     }
 
-    override fun setName(name: Component?) {
-        this.name = name
+    override fun setName(nameCallback: (viewer: Player) -> Component?) {
+        this.nameCallback = nameCallback
         this.syncData()
     }
 
@@ -77,7 +77,7 @@ class CustomNameImpl(
             return
         }
 
-        (entity as CraftPlayer).handle.connection.send(interaction.initialSpawnPacket())
+        (entity as CraftPlayer).handle.connection.send(interaction.initialSpawnPacket(entity))
     }
 
     fun removeFromClient(entity: Player) {
@@ -96,8 +96,8 @@ class CustomNameImpl(
     }
 
     @Nullable
-    override fun getName(): Component? {
-        return this.name
+    override fun getName(viewer: Player): Component? {
+        return this.nameCallback(viewer)
     }
 
     override fun getNametagId(): Int {
@@ -126,8 +126,8 @@ class CustomNameImpl(
             return
         }
 
-        val dataPacket: Packet<ClientGamePacketListener> = interaction.syncDataPacket()
         this.runOnTrackers { player ->
+            val dataPacket: Packet<ClientGamePacketListener> = interaction.syncDataPacket(player)
             (player as CraftPlayer).handle.connection.send(dataPacket)
         }
     }
