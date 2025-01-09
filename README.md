@@ -11,7 +11,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("space.chunks.custom-names:custom-names-api:1.0.5")
+    compileOnly("space.chunks.custom-names:custom-names-api:1.0.6")
 }
 ```
 
