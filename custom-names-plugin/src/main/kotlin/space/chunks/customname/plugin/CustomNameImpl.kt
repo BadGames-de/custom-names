@@ -44,7 +44,7 @@ class CustomNameImpl(
 
         val nmsEntity: net.minecraft.world.entity.Entity = (targetEntity as CraftEntity).handle
         val ridingOffset = nmsEntity.getPassengerRidingPosition(null).subtract(nmsEntity.position()).y
-        val nametagOffset: Float = nmsEntity.type.dimensions.height + 0.5f
+        val nametagOffset: Float = nmsEntity.type.dimensions.height + 0.25f
 
         // First, negate the riding offset to get to the bounding of the entity's bounding box
         // Negate the natural nametag offset of interaction entities (0.5)
